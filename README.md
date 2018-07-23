@@ -3,6 +3,17 @@ JDBC
 
 ## 运行
 1. 执行bash build.sh生成jar包和构建镜像
+2. 执行
+```
+         $ docker run --name=mydb -itd -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root cj/mysql:1.0-my
+         $ docker exec -it db bash
+         $ mysql -uroot -proot -e "create database sakila;use sakila;source sakila-schema.sql;source sakila-data.sql;grant all privileges on *.* to 'zmf'@'%' identified by '123456sql';flush privileges;"
+         $ exit
+         $ docker run --name=javatest -itd -e driver=com.mysql.jdbc.Driver -e ip=192.168.99.100 -e port=3306 -e database=sakila -e user=cj -e password=123456sql -e country-id=3 -e customer-id=3 cj/java:1.0-my
+         $ docker exec -it javatest bash
+         $ java -jar /root/Exam1-1.0-SNAPSHOT.jar
+         $ exit
+```
 
 ## 第一题完成
 City ID | City Name
