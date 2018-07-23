@@ -1,13 +1,5 @@
-mvn clean install;
+mvn clean package
 
-docker pull mysql;
+docker build . -f ./docker/mysql/Dockerfile -t cj/mysql:1.0-my
 
-cd docker/mysql
-
-docker build -t longhe1996/mysqlnew:1.0 .
-
-cd..
-
-cd java
-
-docker build -t longhe1996/javatest3:1.0 .
+docker build . -f ./docker/java/Dockerfile -t cj/java:1.0-my

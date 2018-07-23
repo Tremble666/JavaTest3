@@ -1,6 +1,9 @@
 # JavaTest3
 JDBC
 
+## 运行
+1. 执行bash build.sh生成jar包和构建镜像
+
 ## 第一题完成
 City ID | City Name
 59 | Batna

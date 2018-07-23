@@ -1,7 +1,3 @@
-FROM registry.saas.hand-china.com/hap-cloud/base:latest
+FROM bridg/java8
 
-COPY Exam1-1.0-SNAPSHOT.jar app.jar
-
-ENTRYPOINT exec java $JAVA_OPTS  -jar /app.jar
-
-RUN java -cp target/Exam1-1.0-SNAPSHOT.jar com.hand.Exam1
+ADD Exam1/target/Exam1-1.0-SNAPSHOT.jar /root/Exam1-1.0-SNAPSHOT.jar

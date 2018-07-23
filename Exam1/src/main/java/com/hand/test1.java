@@ -11,12 +11,19 @@ import java.sql.ResultSet;
  * Created by chenjin on 2018/7/23.
  */
 public class test1 {
+    public static final int COUNTRYID;
+    public static final int CUSTOMERID;
+
+    static{
+        COUNTRYID = Integer.parseInt(System.getenv("country-id"));
+        CUSTOMERID = Integer.parseInt(System.getenv("customer-id"));
+    }
     //根据Country ID。返回所有属于这个Country的CityID及名称
     public static void QueryCity(int countryid) throws Exception{
         Connection conn = DruidUtils.getConn();
         String sql = "select city_id,city from city where country_id = ?";
         PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setInt(1,countryid);
+        ps.setInt(1,COUNTRYID);
         ResultSet rs = ps.executeQuery();
         System.out.println("City ID | City Name");
         while (rs.next()){
@@ -31,27 +38,13 @@ public class test1 {
         DruidUtils.close(conn,ps,rs);
     }
 
-    /*public static String getname(int id) throws Exception{
-        Connection conn = DruidUtils.getConn();
-        String sql = "select first_name from customer where id = ?";
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setInt(1,id);
-        ResultSet rs = ps.executeQuery();
-        String name = "  ";
-        if (rs.next()){
-            name = rs.getString("first_name");
-        }
-        DruidUtils.close(conn,ps,rs);
-        return name;
-    }*/
-
 
     //根据Customer ID。返回这个Customer中租的所的Film，按租用时间倒排序
     public static void QueryFilm(int customer_id) throws Exception{
         Connection conn = DruidUtils.getConn();
         String sql = "select t1.film_id,t3.rental_date,t2.first_name from (inventory t1 join customer t2 on t1.store_id = t1.store_id) join rental t3 on t2.customer_id = t3.customer_id where t2.customer_id = ? order by rental_date desc";
         PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setInt(1,customer_id);
+        ps.setInt(1,CUSTOMERID);
         ResultSet rs = ps.executeQuery();
         System.out.println("FILM Id "+"| Film Name |"+"Time");
         while (rs.next()){
@@ -69,8 +62,8 @@ public class test1 {
         QueryFilm(2);
     }
     public static void main(String[] args) throws Exception {
-        //System.out.println("First question:");
-        //QueryCity(2);
+        System.out.println("First question:");
+        QueryCity(2);
         System.out.println("==========================");
         System.out.println("Second question:");
         QueryFilm(3);
