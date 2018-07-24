@@ -1,8 +1,8 @@
 version: "3"
 services:
   mysql:
-    container_name: mydb
-    image: javatest3mysql
+    container_name: mytest
+    image: cj/mysql:1.0-my
     hostname: root
     ports:
     - "3306:3306"
@@ -10,7 +10,16 @@ services:
       MYSQL_ROOT_PASSWORD: 123456
     expose:
     - "3306"
-
+  java:
+      container_name: javatest
+      image: cj/java:1.0-my
+      hostname: javatest
+      command: java -jar /root/Exam1-1.0.jar
+      environment:
+        user: cj
+        password: 123456
+        country-id: 23
+        customer-id: 23
 
 
 
