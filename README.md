@@ -4,20 +4,18 @@ JDBC
 ## 运行
 1. 执行./build.sh生成jar包和构建镜像
 2. 执行./start.sh生成对应的两个容器
-3. （如果运行不成功./start.sh）就执行
+3. 因为我没有在compose文件中指定command,会出问题，所以请老师手动添加指令，指令如下：
+
 ```
-         $ docker run --name=mytest -itd -p 3307:3306 -e MYSQL_ROOT_PASSWORD=123456 cj/mysql:1.0-my
          $ docker exec -it mytest bash
          $ mysql -u root -p
          $ 123456
-         $ create database sakila;use sakila;source sakila-schema.sql;source sakila-data.sql;grant all privileges on *.* to 'cj'@'%' identified by '123456';flush privileges;
+         $ create database sakila;use sakila;source sakila-schema.sql;source sakila-data.sql;
          $ exit
-         $ docker run --name=javatest -itd -e driver=com.mysql.jdbc.Driver -e ip=192.168.99.100 -e port=3306 -e database=sakila -e user=cj -e password=123456sql -e country-id=3 -e customer-id=3 cj/java:1.0-my
          $ docker exec -it javatest bash
          $ java -jar /root/Exam1-1.0-SNAPSHOT.jar
          $ exit
 ```
-
 ## 第一题完成
 City ID | City Name
 59 | Batna
