@@ -1,5 +1,7 @@
-FROM mysql
+FROM registry.saas.hand-china.com/tools/mysql:5.6
 
-ADD ./docker/mysql /docker
+COPY sakila-schema.sql /mysql/sakila-schema.sql
+COPY sakila-data.sql /mysql/sakila-data.sql
 
-WORKDIR /docker
+RUN cat /mysql/sakila-schema.sql > /docker-entrypoint-initdb.d/dump.sql
+RUN cat /mysql/sakila-data.sql >> /docker-entrypoint-initdb.d/dump.sql

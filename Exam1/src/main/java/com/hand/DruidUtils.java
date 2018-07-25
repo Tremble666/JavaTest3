@@ -1,5 +1,6 @@
 package com.hand;
 
+import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.DruidDataSourceFactory;
 
 import javax.sql.DataSource;
@@ -15,22 +16,21 @@ import java.util.Properties;
 //一个工具类
 public class DruidUtils {
     private static Properties pro = new Properties();
-    private static DataSource ds = null;
+    private static DruidDataSource ds = null;
 
     private DruidUtils() {
     };
 
     static {
-        ClassLoader cl = Thread.currentThread().getContextClassLoader();
-        InputStream in = null;
-        try {
-            in = cl.getResourceAsStream("druid.properties");
-            pro.load(in);
-            //ds = BasicDataSourceFactory.createDataSource(pro);
-            ds = DruidDataSourceFactory.createDataSource(pro);
-        } catch (Exception e1) {
-            throw new RuntimeException("读取配置文件出现异常");
-        }
+        ds = new DruidDataSource();
+        String ip = System.getenv("IP");
+        String port=System.getenv("PORT");
+        String dbname=System.getenv("DBNAME");
+        String username = System.getenv("USERNAME");
+        String password=System.getenv("PASSWORD");
+        ds.setUrl("jdbc:mysql://"+ip+":"+port+"/"+dbname);
+        ds.setUsername(username);
+        ds.setPassword(password);
     }
 
     public static Connection getConn() {

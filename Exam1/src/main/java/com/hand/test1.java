@@ -19,8 +19,9 @@ public class test1 {
         CUSTOMERID = Integer.parseInt(System.getenv("customer-id"));
     }
     //根据Country ID。返回所有属于这个Country的CityID及名称
-    public static void QueryCity(int countryid) throws Exception{
+    public static void QueryCity() throws Exception{
         Connection conn = DruidUtils.getConn();
+        System.out.println("connection success!");
         String sql = "select city_id,city from city where country_id = ?";
         PreparedStatement ps = conn.prepareStatement(sql);
         ps.setInt(1,COUNTRYID);
@@ -29,8 +30,6 @@ public class test1 {
         while (rs.next()){
             int city_id = rs.getInt("city_id");
             String city = rs.getString("city");
-            //System.out.println("country_id="+countryid+"==>"+"   city_id="+city_id+",cityname="+city);
-            //System.out.println("Country ID:"+countryid);
 
             System.out.println(city_id+" | "+city);
         }
@@ -40,16 +39,16 @@ public class test1 {
 
 
     //根据Customer ID。返回这个Customer中租的所的Film，按租用时间倒排序
-    public static void QueryFilm(int customer_id) throws Exception{
+    public static void QueryFilm() throws Exception{
         Connection conn = DruidUtils.getConn();
-        String sql = "select t1.film_id,t3.rental_date,t2.first_name from (inventory t1 join customer t2 on t1.store_id = t1.store_id) join rental t3 on t2.customer_id = t3.customer_id where t2.customer_id = ? order by rental_date desc";
+        String sql = "select f.*, r.rental_date from film f, rental r, inventory i where r.customer_id = ? and r.inventory_id = i.inventory_id and i.film_id = f.film_id order by r.rental_date DESC";
         PreparedStatement ps = conn.prepareStatement(sql);
         ps.setInt(1,CUSTOMERID);
         ResultSet rs = ps.executeQuery();
         System.out.println("FILM Id "+"| Film Name |"+"Time");
         while (rs.next()){
             int film_id = rs.getInt("film_id");
-            String name = rs.getString("first_name");
+            String name = rs.getString("title");
             Object date = rs.getObject("rental_date");
             System.out.println(film_id+" | "+name+" | "+date.toString());
         }
@@ -58,14 +57,14 @@ public class test1 {
     }
     @Test
     public void testQureyCountry() throws Exception{
-        QueryCity(2);
-        QueryFilm(2);
+        QueryCity();
+        QueryFilm();
     }
     public static void main(String[] args) throws Exception {
         System.out.println("First question:");
-        QueryCity(2);
+        QueryCity();
         System.out.println("==========================");
         System.out.println("Second question:");
-        QueryFilm(3);
+        QueryFilm();
     }
 }

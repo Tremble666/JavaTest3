@@ -1,25 +1,31 @@
 version: "3"
 services:
-  mysql:
-    container_name: mytest
-    image: cj/mysql:1.0-my
-    hostname: root
+  mysql-1:
+    container_name: mysql-1
+    build: ./docker/mysql
+    image: javatest/mysql:1.0
     ports:
-    - "3307:3306"
+      - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: 123456
-    expose:
-    - "3306"
-  java:
-      container_name: javatest
-      image: cj/java:1.0-my
-      tty: true
-      hostname: javatest
-      environment:
-        user: cj
-        password: 123456
-        country-id: 23
-        customer-id: 23
+  java-1:
+    container_name: java-1
+    build: .
+    image: javatest/java:1.0
+    depends_on:
+      - mysql-1
+    links:
+      - mysql-1
+    environment:
+      MYSQL_IP: mysql-1
+      MYSQL_PORT: 3306
+      USERNAME: root
+      PASSWORD: 123456
+      IP: 192.168.99.100
+      DBNAME: "sakila"
+      PORT: "3306"
+      country-id: 2
+      customer-id: 88
 
 
 
